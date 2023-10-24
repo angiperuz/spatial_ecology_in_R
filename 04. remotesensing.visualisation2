@@ -1,1 +1,8 @@
+#remote sernsing for ecosystem monitoring
+install.packages("devtools")
+library(devtools)
 
+devtools::install_github("ducciorocchini/imageRy")    #to install a package directly from github
+
+library(imageRy)
+im.list()

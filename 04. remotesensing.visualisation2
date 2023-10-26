@@ -45,3 +45,12 @@ b2
 c1b <- colorRampPalette(c("darkgrey", "grey", "lightgrey")) (100)
 plot(b2, col=c1b)
 
+#import the green band from sentinel-2 (band 3)
+
+b3 <- im.import("sentinel.dolomites.b3.tif") 
+c2b <- colorRampPalette(c("red", "orange", "yellow")) (100)
+plot(b2, col=c2b)
+b3
+
+#light: is reflecting the green wave. the more is scuro, the more it absorb the green light
+

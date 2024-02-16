@@ -1,0 +1,348 @@
+install.packages("RStoolbox")
+
+library(terra)
+library(imageRy)
+library(ncdf4)
+library(terra)
+library(ggplot2)
+library(patchwork)
+
+
+setwd("C:/Users/angel/Desktop/spatialecologyexam")
+
+
+
+#data of Marmolada glacier from 2016
+
+b02_t1 <- rast("marmB02_t1.jpg") 
+
+b03_t1 <- rast("marmB03_t1.jpg")
+b03_t1
+
+b04_t1 <- rast("marmB04_t1.jpg")
+
+b08_t1 <- rast("marmB08_t1.jpg")
+
+b10_t1 <- rast("marmB10_t1.jpg")
+
+b11_t1 <- rast("marmB11_t1.jpg")
+b11_t1
+
+
+#bande 02, 03, 04 sono le bande ottiche RGB per blu, verde, rosso. Banda del visibile. 
+#Danno informazioni sulla riflettanza della superficie terrestre
+#banda 08: NIR, cambiamenti del suolo, presenza di neve sul ghiacciaio
+
+
+c1 <- colorRampPalette(c("lightgreen", "purple", "orange")) (500)
+c2 <- colorRampPalette(c("blue", "yellow", "brown")) (500)
+c3 <- colorRampPalette(c("#00FFFF", "#FF00FF", "#006400")) (500)
+
+###palette distinguibili da gente daltonica 
+
+
+par(mfrow=c(3, 1))
+plot(b02_t1,col=c1)
+plot(b03_t1,col=c2)
+plot(b04_t1,col=c3)
+
+
+
+stacksent_t1 <- c(b02_t1, b03_t1, b04_t1, b08_t1)
+plot(stacksent_t1, col=viridisc)
+
+
+dev.off()
+
+
+
+#1=NIR, 2=RED, 3=GREEN
+
+
+par(mfrow=c(2,2))
+im.plotRGB(stacksent_t1, r=3, g=2, b=1)
+im.plotRGB(stacksent_t1, r=4, g=3, b=2)
+im.plotRGB(stacksent_t1, r=3, g=4, b=2)
+im.plotRGB(stacksent_t1, r=3, g=2, b=4)
+
+
+
+dev.off()
+
+
+
+
+#data of Marmolada glacier from 2023
+
+b02_t2 <- rast("marmB02_t2.jpg") 
+
+b03_t2 <- rast("marmB03_t2.jpg")
+
+b04_t2 <- rast("marmB04_t2.jpg")
+
+b08_t2 <- rast("marmB08_t2.jpg")
+
+b10_t2 <- rast("marmB10_t2.jpg")
+
+b11_t2 <- rast("marmB11_t2.jpg")
+
+
+par(mfrow=c(3, 1))
+plot(b02_t2,col=c1)
+plot(b03_t2,col=c2)
+plot(b04_t2,col=c3)
+
+
+dev.off()
+
+
+stacksent_t2 <- c(b02_t2, b03_t2, b04_t2, b08_t2)
+plot(stacksent_t2, col=viridisc)
+
+par(mfrow=c(2,2))
+im.plotRGB(stacksent_t2, r=3, g=2, b=1)
+im.plotRGB(stacksent_t2, r=4, g=3, b=2)
+im.plotRGB(stacksent_t2, r=3, g=4, b=2)
+im.plotRGB(stacksent_t2, r=3, g=2, b=4)
+
+
+
+stacksent_t1t2 <- c(b08_t1, b08_t2)
+plot(stacksent_t1t2, col=viridisc)
+
+
+
+dev.off()
+
+
+
+#image stack of the two years with their true color:
+
+true_16 <- im.plotRGB(stacksent_t1, r = 3, g = 2, b = 1)
+true_23 <- im.plotRGB(stacksent_t2, r = 3, g = 2, b = 1)
+
+ 
+###togli nuvole 
+
+#multiframe with 2016 and 2023 images
+
+par(mfrow=c(1,2))
+im.plotRGB(stacksent_t1, r=3, g=2, b=1)
+im.plotRGB(stacksent_t2, r=3, g=2, b=1)
+
+###we can see the differences also from these images
+
+
+dev.off()
+
+
+
+#index Normalized Difference Snow Index (NDSI)
+#the formula used for this index is: NDSI = (green - swir) / (green + swir)
+
+
+
+###BIBLIOGRAFIA: https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/ndsi/
+##https://medium.com/wegaw/the-power-of-deep-learning-for-eo-small-sample-size-big-results-eb869b1ecb90
+
+## we have to disaggregate the images of B11 in t1 and t2
+b11_t2
+b11_t1
+
+ext(b11_t2) == ext(b11_t1)
+
+?disagg
+
+
+### change in resolution and dimension of b11 image
+b11_t1_scaled <- disagg(b11_t1, 2)
+plot(b11_t1_scaled)
+
+b11_t2_scaled <- disagg(b11_t2, 2)
+plot(b11_t2_scaled)
+
+
+SWIR_t1 <- b11_t1_scaled
+SWIR_t2 <- b11_t2_scaled
+
+
+##NDSI for 2016 data
+NDSI_t1 <- ((b03_t1 - SWIR_t1) / (b03_t1 + SWIR_t1))
+NDSI_t1
+
+plot(NDSI_t1, col=viridisc)
+
+
+
+##NDSI for 2022 data
+NDSI_t2 <- ((b03_t2 - SWIR_t2) / (b03_t2 + SWIR_t2))
+NDSI_t2
+
+plot(NDSI_t2, col=viridisc)
+
+
+
+par(mfrow=c(2, 1))
+plot(NDSI_t1, col=viridisc, main = "Normalized Difference Snow Index (NDSI) 2016")
+plot(NDSI_t2, col=viridisc, main = "Normalized Difference Snow Index (NDSI) 2023")
+
+
+#difference between the two years
+difference <- NDSI_t1 - NDSI_t2
+plot(difference, col=viridisc, main = "NDSI Difference (2016-2023) ")
+
+
+#histograms of the snow frequency
+par(mfrow=c(3, 1))
+hist(NDSI_t1, col= c("lightblue"), main= "Snow frequency in 2016", xlab = "NDSI")
+hist(NDSI_t2, col= c("navy"), main= "Snow frequency in 2023", xlab = "NDSI")
+hist(difference, main = "Differences in Snow coverage", col="darkgreen",  xlab = "NDSI Difference")
+
+
+##https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/bands/
+
+#b10 can be use for cirrus cloud detection:
+
+b10_t1 <- rast("marmB10_t1.jpg")
+b10_t2 <- rast("marmB10_t2.jpg")
+
+
+par(mfrow=c(2,1))
+plot(b10_t1, col=viridisc, main = "Band 10, 2016")
+plot(b10_t2, col=viridisc, main = "Band 10, 2022")
+
+
+dev.off()
+
+
+
+
+#voglio vedere dove c'è neve e dove no, usando due clusters
+###https://bikeshbade.com.np/tutorials/Detail/?title=Normalized%20Difference%20Snow%20Index%20(NDSI)&code=24
+
+
+
+####create 2 clusters for visualizing snow/ice
+
+c_t1 <- im.classify(NDSI_t1, num_clusters = 2)
+
+c_t2 <- im.classify(NDSI_t2, num_clusters = 2)
+
+
+par(mfrow=c(2,1))
+plot(c_t1)
+plot(c_t2)
+
+
+
+
+########frequencies and tables and final thingsssss
+
+ft1 <- freq(c)
+ft1
+tott1 <- ncell(c)
+tott1
+pt1 <- ft1 * 100 / tott1
+pt1
+
+
+
+
+### Percentage of 2023
+ft2 <- freq(c2)
+ft2
+
+tott2 <- ncell(c2)
+tott2
+
+pt2 <- ft2 * 100 / tott2
+pt2
+
+
+##con il metodo c vengono: 
+
+
+##con il metodo altro
+
+ft1 <- freq(clusters)
+ft1
+tott1 <- ncell(clusters)
+tott1
+pt1 <- ft1 * 100 / tott1
+pt1
+
+###5,135 e 96,87
+
+
+
+### Percentage of 2023
+ft2 <- freq(clusters2)
+ft2
+
+tott2 <- ncell(clusters2)
+tott2
+
+pt2 <- ft2 * 100 / tott2
+pt2
+
+
+#####6,54 e 93,46
+
+
+
+##vanno bene o sono troppo simili? dovrei trovare degli altri valori?
+
+
+
+
+
+
+
+
+
+# Bulding tables with the percentages 
+
+class <- c("PRESENCE OF SNOW", "NO SNOW")
+y2016 <- c()
+y2023 <- c()
+
+
+
+
+
+
+
+
+
+
+
+
+# with data.frame we create the final table 
+tabout <- data.frame(class, y2016, y2023)
+
+
+p1 <- ggplot(tabout, aes(x=class, y=y2016, color=class)) + geom_bar(stat="identity", fill="white") + ylim(c(0,100))
+p2 <- ggplot(tabout, aes(x=class, y=y2023, color=class)) + geom_bar(stat="identity", fill="white") + ylim(c(0,100))
+plot(p1)
+plot(p2)
+
+
+dev.off()
+
+
+# Calculate standard deviation 
+# Variability in space
+sd16_3 <- focal(NDSI16, matrix(1/9, 3, 3), fun=sd)
+plot(sd16_3)
+
+sd23_3 <- focal(NDSI23, matrix(1/9, 3, 3), fun=sd)
+plot(sd23_3)
+
+sd16_7 <- focal(NDSI16, matrix(1/49, 7, 7), fun=sd)
+plot(sd16_7)
+
+sd23_7 <- focal(NDSI23, matrix(1/49, 7, 7), fun=sd)
+plot(sd23_7)
+
+
+

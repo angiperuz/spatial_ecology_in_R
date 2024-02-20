@@ -44,14 +44,3 @@ plot(people, microplastics, pch=19, cex=2)
 
 #we can also change the colors
 plot(people, microplastics, pch=19, cex=2, col="blue")
-
-
-
-
-
-
-
-
-
-
-     

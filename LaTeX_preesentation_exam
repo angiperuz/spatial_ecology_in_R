@@ -1,0 +1,331 @@
+\documentclass{beamer}
+\usepackage{graphics} %required to insert images 
+\usepackage{listings}
+\usepackage{siunitx}
+
+
+\usetheme{Darmstadt}
+\usecolortheme{seahorse}
+
+
+
+
+
+\title{Changes in snow cover in the bellunese Dolomites and its surroundings (Italy)}
+\subtitle{Comparison of satellite images from 2016 and 2022}
+
+\author{Angela Peruzzi\\
+Alma Mater Studiorum, Università di Bologna\\}
+
+
+\date{\textit{Exam of Spatial Ecology in R\\
+June 2024}}
+\begin{document}
+
+\maketitle
+
+\AtBeginSection[] % Do nothing for \section*
+{
+\begin{frame}
+\frametitle{Index}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\section{Introduction}
+
+
+
+
+\begin{frame}{Introduction}
+\begin{itemize}
+    \item The aim of this project is to compare satellite images of the \textbf{bellunese Dolomites} area, in order to analize changes in snow cover after 6 years. 
+    \item The images are from \textbf{April 2016} and \textbf{April 2022}. This choice was made to analize the amount of snow present on these mountains during the spring period. 
+    \item A brief analysis is made also on the \textbf{vegetation} presence in this area
+     \end{itemize}  
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+\centering
+{\includegraphics[width=8cm]{Marm.area.png}}
+\caption{Area of interest - bellunese Dolomites and its surroundings}
+\end{figure}
+\end{frame}
+
+
+\section{Materials and Methods}
+\begin{frame}{Materials and Methods}
+For this project, the following tools were used:
+\begin{itemize}
+\item R studio
+\item Github
+ \item Copernicus Open Access Hub - Sentinel 2
+\item LaTeX software
+\end{itemize}  
+
+\end{frame}
+
+
+\begin{frame}{R packages}
+    \begin{columns}[c]
+	\column{3cm}
+R packages used:
+\begin{itemize}
+
+\item terra
+\item imageRy
+\item ncdf4
+\item ggplot2 
+\end{itemize}
+	\column{5cm}
+	  
+\begin{figure}
+\centering
+\includegraphics[width=4cm]{rstudio_94807.png}
+\end{figure}
+			
+\end{columns}
+    
+  
+\end{frame}
+
+\section{Data and analysis}
+
+\begin{frame}{What kind of data have been taken?}
+    \begin{itemize}
+        \item The satellite images were taken from Sentinel 2 - Open Hub. 2016 images will be referred to as \textbf{t1}, 2022 images as \textbf{t2}.
+        \item I was interesting in particular in some Bands, useful for the analysis: 2, 3, 4, 8 and 11. 
+        \item The indices I computed for both years images are the \textbf{NDSI} - Normalized Difference Snow Index and the \textbf{NDVI} - Normalized Difference Vegetation Index.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Data importing}
+Steps made to import the Satellite images on R:
+\begin{enumerate}
+    \item download of data from Copernicus database (single images for each Band)
+    \item setting the working directory in R with the function \textbf{setwd()}
+    \item upload the images with the function \textbf{rast()}
+    
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{About NDSI}
+\begin{itemize}
+    \item NDSI index is a measure of the relative magnitude of the reflectance difference between \textbf{visible} and \textbf{shortwave} infrared and it is useful for snow mapping.
+    \item This index is also good for images with \textbf{clouds}: snow is highly absorptive in the NIR or the short-wave infrared part of the spectrum, while the most cloud reflectance remains to be high in the same parts of the spectrum: this allows a good separation of most clouds and snow. 
+    \item NDSI ranges \textbf{from -1 to 1}. Values \textbf{above 0.42} are usually snow.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{About NDSI}
+\begin{itemize}
+    \item The Sentinel-2 NDSI formula is the following:\\
+         \begin{equation}
+         NDSI = \frac{GREEN(B3) - SWIR(B11)}{GREEN(B3)+ SWIR(B11)}
+           \end{equation}
+\end{itemize}
+\begin{figure}
+    \includegraphics[width=0.6\textwidth]{bande.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{About NDVI}
+It ranges from -1 to 1.
+The NDVI formula for Sentinel-2 is the following:
+         \begin{equation}
+         NDVI = \frac{NIR (B8) - RED(B4)}{NIR(B8) + RED(B4)}
+           \end{equation}
+\begin{itemize}
+    \item Values approaching -1: correspond to water
+    \item Values between -0.1 and 0.1: correspond to barren areas of rock, sand, or \textbf{snow}. 
+    \item Values approximately 0.2 to 0.4: represent shrub and grassland 
+    \item Values approaching 1: indicate temperate and tropical rainforests and high vegetation vigour.
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{Focus on Bands}
+\begin{figure}
+\centering
+\includegraphics[width=9cm]{The-normalized-spectral-response-of-Sentinel-2A-multi-spectral-instrument-MSI-bands.png}
+\caption{Spectral response of the Bands and their Wavelength}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{First steps of the analysis}
+\begin{figure}
+    \includegraphics[width=0.75\textwidth]{serie6giusta.png}
+\caption{B2, B3 and B4 plotted with different colours}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{First steps of the analysis}
+\begin{figure}[\textit{Images of t1 and t2 plotted with im.plotRGB function}]
+    \includegraphics[width=0.4\textwidth]{truet1r.png}
+    \includegraphics[width=0.4\textwidth]{truet2r.png}
+\caption{Images of t1 and t2 plotted with \textbf{im.plotRGB} function}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{NDSI visualisation of the area}
+    
+\begin{figure}
+     \includegraphics[width=0.45\textwidth]{giusta1.png}
+    \includegraphics[width=0.45\textwidth]{giusta2.png}
+\end{figure}
+
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Histograms for snow frequency at t1, t2 and their difference}
+\begin{figure}
+  
+    \includegraphics[width=1\linewidth]{aaaaaaaaaaaaaaaaaaaaaa.png} 
+
+
+\end{figure}
+
+
+\end{frame}
+
+
+
+\begin{frame}{Creation of the clusters}
+\begin{columns}[c]
+	\column{3cm}
+ \footnotesize
+ I used the function \textbf{im.classify()} to create
+ \textbf{2 clusters}.\\
+\vspace{0.2cm}
+The aim was to better visualise the snow cover of the area in the two periods.\\
+\vspace{0.2cm}
+On the right the images of the clusters for t1 and t2 are plotted.
+	\column{8cm}
+	\includegraphics[width=3.5cm]{yes1.png}
+        \includegraphics[width=3.5cm]{yes2.png}
+			
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Percentages of snow coverage in the two periods}
+\begin{columns}[c]
+	\column{5cm}
+Formula used:
+\begin{equation}
+         \% = \frac{freq() \times  100}{ncell()}
+           \end{equation}
+
+\begin{itemize}
+    \item \textbf{freq()} = number of pixels of each class
+    \item \textbf{ncell()} = total number of pixels of image
+\end{itemize}
+ \column{6cm}
+Results obtained:
+
+\begin{table}[]
+\begin{tabular}{cccll}
+\cline{1-3}
+\multicolumn{1}{|c|}{}                 & \multicolumn{1}{c|}{\textbf{t1}} & \multicolumn{1}{c|}{\textbf{t2}} &  &  \\ \cline{1-3}
+\multicolumn{1}{|c|}{\textbf{Snow}}    & \multicolumn{1}{c|}{26,15 \%}    & \multicolumn{1}{c|}{15,60 \%}    &  &  \\ \cline{1-3}
+\multicolumn{1}{|c|}{\textbf{No snow}} & \multicolumn{1}{c|}{73,85 \%}    & \multicolumn{1}{c|}{84,40 \%}    &  &  \\ \cline{1-3}
+\multicolumn{1}{l}{}                   & \multicolumn{1}{l}{}             & \multicolumn{1}{l}{}             &  & 
+\end{tabular}
+\end{table}
+
+
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Percentages graphs}
+\begin{figure}
+    \includegraphics[width=0.4\textwidth]{clu2016.png}
+    \includegraphics[width=0.4\textwidth]{clu2022.png}
+\caption{Percentages of snow presence and absence at t1 and t2}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{NDVI visualisation of the area}
+\begin{figure}
+    \centering
+    \includegraphics[width=10cm]{giustandvi.png}
+\end{figure}
+It can be observed a smaller range of values of NDVI at t2.
+\end{frame}
+
+
+\begin{frame}{NDSI and NDVI}
+\begin{figure}
+    \centering
+    \includegraphics[width=6.5cm]{finale confronti.png}
+\end{figure}
+\caption{}
+\end{frame}
+
+\begin{frame}{Variability in a 3x3 window}
+With the functions \textbf{focal()} and \textbf{sd()} I computed the standard deviation 3x3 pixels window, in order to calculate the variability.
+\begin{figure}
+    \centering
+    \includegraphics[width=9cm]{NDVImoving.png}
+\end{figure}
+
+\end{frame}
+
+
+
+
+\section{Discussion}
+\begin{frame}{Discussion and conclusions (1)}
+
+The principal conclusions of this analysis are:
+\begin{enumerate}
+    \item There has been a \textbf{variation in snow cover} from 2016 to 2022. In particular, the percentage of snow varied \textbf{from 26,15\%} in 2016 to \textbf{15,60\%} in 2022. This could probably but not certainly be due to rising temperatures in recent years.\\
+    \item This variation can be clearly seen in all the images plotted: the RGB ones and the NDSI index ones.\\
+    \item The function \textbf{im.classify()} to create the 2 clusters seems to shown \textbf{good results} in indicating the areas where the snow is present or not.
+
+    
+        \end{enumerate}
+    \end{frame}
+
+\begin{frame}{Discussion and conclusions (2)}
+\begin{enumerate}
+    \item From the NDVI index computation it can be noted that the areas cover with values around 0 (that indicate also snow) are \textbf{less extended at t2} compared to t1: this is another confirmation of the decrease in snow cover. 
+    \item There are also more values of NDVI close to 1 (dark green area) at t1, and this indicates that in this period \textbf{plants} in the studied area \textbf{were healthier} in comparison with t2.
+
+        \end{enumerate}
+    \end{frame}
+
+\section{Bibliography}
+
+\begin{frame}{Sitography}
+  \begin{itemize}
+      \item https://dataspace.copernicus.eu/
+      \item https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/ndsi/
+      \item https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/
+      \item https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/ndvi/
+      \item https://www.agricolus.com/indici-vegetazione-ndvi-ndmi-istruzioni-luso/   
+      \item https://www.dolomiti.it/it/passi-e-montagne/marmolada-la-regina-delle-dolomiti
+      \end{itemize}
+\end{frame}
+
+\begin{frame}
+
+\centering Thank you for your attention!
+\begin{figure}
+    \includegraphics[width=0.9\textwidth]{marmolada_passo_pordoi_gruppo_sella_depositphotos-tablet.jpg}
+\end{figure}
+    
+\end{frame}
+
+\end{document}

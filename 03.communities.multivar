@@ -22,10 +22,10 @@ ldc4 <- 1.47888
 total = ldc1 + ldc2 + ldc3 + ldc4
 total
 
-pldc1 = ldc1 *100 / total
-pldc2 = ldc2 *100 / total
-pldc3 = ldc3 *100 / total
-pldc4 = ldc4 *100 / total
+pldc1 = ldc1 * 100 / total
+pldc2 = ldc2 * 100 / total
+pldc3 = ldc3 * 100 / total
+pldc4 = ldc4 * 100 / total
 
 pldc1
 pldc2
@@ -33,8 +33,6 @@ pldc3
 pldc4
 
 
-#how much of the comulative percentage the first 2 cover the..
+#how much of the comulative percentage the first 2 cover 
 
 plot(ord)
-
-

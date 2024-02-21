@@ -16,8 +16,6 @@
 # 10 Variability
 # 11 PCA: Principal Component Analysis
 
-# ----------------------
-
 
 
 # 01 Beginning
@@ -536,7 +534,7 @@ im.plotRGB(stackG4, r=1,g=2,b=3)
 
 library(terra)
 
-setwd("/Users/gaiabenevenga/Desktop/download images")
+setwd("/Users/angelaperuzzi/Desktop/download images")
 getwd()
 
 #rast function from terra to upload our data 
@@ -569,10 +567,6 @@ acadif = aca[[1]] - aca2[[1]]
 plot(acadif)
 plot(acadif, col=cl)
 
-
-
-
-#per vedere quali file ci sono all'interno della cartella selezionata
 list.files()
 
 
@@ -587,7 +581,7 @@ install.packages("ncdf4")
 library(ncdf4)
 library(terra)
 
-setwd("/Users/gaiabenevenga/Desktop/download images")
+setwd("/Users/angelaperuzzi/Desktop/download images")
 iceland2023 <- rast("c_gls_LST_202311281500_GLOBE_GEO_V2.1.2.nc")
 iceland2023
 

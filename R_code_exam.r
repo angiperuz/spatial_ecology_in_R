@@ -50,6 +50,8 @@ plot(b04_t2, col = c3, main = "B04_t2")
 
 dev.off()
 
+
+
 #stacksent t1
 
 stacksent_t1 <- c(b02_t1, b03_t1, b04_t1, b08_t1)
@@ -57,8 +59,6 @@ plot(stacksent_t1, col=viridisc)
 
 
 #1=NIR, 2=RED, 3=GREEN
-
-
 par(mfrow=c(2,2))
 im.plotRGB(stacksent_t1, r=3, g=2, b=1)
 im.plotRGB(stacksent_t1, r=4, g=3, b=2)
@@ -75,11 +75,15 @@ stacksent_t2 <- c(b02_t2, b03_t2, b04_t2, b08_t2)
 plot(stacksent_t2, col=viridisc)
 
 
+#1=NIR, 2=RED, 3=GREEN
 par(mfrow=c(2,2))
 im.plotRGB(stacksent_t2, r=3, g=2, b=1)
 im.plotRGB(stacksent_t2, r=4, g=3, b=2)
 im.plotRGB(stacksent_t2, r=3, g=4, b=2)
 im.plotRGB(stacksent_t2, r=3, g=2, b=4)
+
+
+dev.off()
 
 
 
@@ -103,8 +107,7 @@ dev.off()
 #the formula used for this index is: 
 #NDSI = (green - swir) / (green + swir)
 
-#I have to disaggregate the images of B11 at t1 and t2
-#to change in resolution and dimension of b11 image
+#I have to disaggregate the images of B11 at t1 and t2, in order to change the b11 image in resolution and dimension 
 b11_t2
 b11_t1
 
@@ -124,7 +127,6 @@ NDSI_t1 = ((b03_t1 - SWIR_t1) / (b03_t1 + SWIR_t1))
 NDSI_t1
 
 
-
 ##NDSI for 2022 data
 NDSI_t2 = ((b03_t2 - SWIR_t2) / (b03_t2 + SWIR_t2))
 NDSI_t2
@@ -142,7 +144,6 @@ difference <- NDSI_t1 - NDSI_t2
 plot(difference, col=viridisc, main = "NDSI Difference (t1-t2) ")
 
 
-
 #histograms of the snow frequency
 par(mfrow=c(1, 3))
 hist(NDSI_t1, col= c("coral1"), main= "Snow frequency at t1", xlab = "NDSI")
@@ -153,12 +154,14 @@ dev.off()
 
 
 
-#create 2 clusters to better visualise the snow at t1 and t2
+#creation of 2 clusters to better visualise the snow at t1 and t2
 c_t1 <- im.classify(NDSI_t1, num_clusters = 2)
 
 c_t2 <- im.classify(NDSI_t2, num_clusters = 2)
 
 colclu <- colorRampPalette(c("white", "darkgoldenrod4")) (100)
+
+
 
 par(mfrow=c(1,2))
 plot(c_t1, col=colclu, main = "Presence of snow (1) and no snow (2) at t1")
@@ -174,7 +177,7 @@ ft1 <- freq(c_t1)
 tott1 <- ncell(c_t1)
 pt1 <- ft1 * 100 / tott1
 pt1 
-#26.15, 73.85
+#the results are 26.15 (snow presence) and 73.85 (snow absence)
 
 
 #t2
@@ -182,11 +185,11 @@ ft2 <- freq(c_t2)
 tott2 <- ncell(c_t2)
 pt2 <- ft2 * 100 / tott2
 pt2
-#15.60, 84.40
+#the results are 15.60 (snow presence) and 84.40 (snow absence)
 
 
 
-# Bulding graph with the percentages
+# Bulding graph with the results
 
 class <- c("SNOW", "NO SNOW")
 t1_2016 <- c(26.15, 73.85)
@@ -201,6 +204,7 @@ plot(p1)
 plot(p2)
 
 dev.off()
+
 
 
 
@@ -224,7 +228,7 @@ plot(NDVI_t2, main = "NDVI (t2)")
 
 
 
-#NSDI e NDVI insieme
+#visualisation of NSDI e NDVI together for t1 and t2
 par(mfrow=c(2, 2))
 plot(NDSI_t1, col=viridisc, main = "NDSI (t1)")
 plot(NDSI_t2, col=viridisc, main = "NDSI (t2)")
@@ -232,7 +236,7 @@ plot(NDVI_t1, main = "NDVI (t1)")
 plot(NDVI_t2, main = "NDVI (t2)")
 
 
-#create 2 clusters to better visualise difference in vegetation at t1 and t2
+#create 2 clusters to better visualise difference in vegetation cover at t1 and t2
 v_t1 <- im.classify(NDVI_t1, num_clusters = 2)
 
 v_t2 <- im.classify(NDVI_t2, num_clusters = 2)
@@ -240,18 +244,18 @@ v_t2 <- im.classify(NDVI_t2, num_clusters = 2)
 colclu <- colorRampPalette(c("darkgreen", "lightgreen")) (100)
 
 par(mfrow=c(1,2))
-plot(v_t1, col=colclu, main = "Clusters for NDVI at t1")
-plot(v_t2, col=colclu, main = "Clusters for NDVI at t2")
+plot(v_t1, col=colclu, main = "NDVI using two clusters at t1")
+plot(v_t2, col=colclu, main = "NDVI using two clusters at t2")
 
 
 dev.off()
 
 
 
-#calculate the variability
+#calculate the variability 
 #3x3 pixels moving window for NDVI
 
-#this function focal() computes standard deviation of values of pixels in a window 3x3
+#the function focal() computes standard deviation of values of pixels in a window 3x3
 #for each position in the raster 
 
 sd16_3 <- focal(NDVI_t1, matrix(1/9, 3, 3), fun=sd)
@@ -262,4 +266,3 @@ plot(sd16_3, main = "NDVI_t1 (3x3)")
 plot(sd22_3, main = "NDVI_t2 (3x3)")
 
 dev.off()
-

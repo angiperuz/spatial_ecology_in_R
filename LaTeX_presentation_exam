@@ -3,12 +3,8 @@
 \usepackage{listings}
 \usepackage{siunitx}
 
-
 \usetheme{Darmstadt}
 \usecolortheme{seahorse}
-
-
-
 
 
 \title{Changes in snow cover in the bellunese Dolomites and its surroundings (Italy)}
@@ -16,7 +12,6 @@
 
 \author{Angela Peruzzi\\
 Alma Mater Studiorum, Università di Bologna\\}
-
 
 \date{\textit{Exam of Spatial Ecology in R\\
 June 2024}}
@@ -27,7 +22,7 @@ June 2024}}
 \AtBeginSection[] % Do nothing for \section*
 {
 \begin{frame}
-\frametitle{Index}
+\frametitle{Contents}
 \tableofcontents[currentsection]
 \end{frame}
 }
@@ -35,13 +30,11 @@ June 2024}}
 \section{Introduction}
 
 
-
-
 \begin{frame}{Introduction}
 \begin{itemize}
     \item The aim of this project is to compare satellite images of the \textbf{bellunese Dolomites} area, in order to analize changes in snow cover after 6 years. 
-    \item The images are from \textbf{April 2016} and \textbf{April 2022}. This choice was made to analize the amount of snow present on these mountains during the spring period. 
-    \item A brief analysis is made also on the \textbf{vegetation} presence in this area
+    \item The images are from \textbf{April 2016} and \textbf{April 2022}. This choice was made to do an analysis of the \textbf{amount of snow} on these mountains during the spring period. 
+    \item A brief analysis is made also on the \textbf{vegetation} presence in this area.
      \end{itemize}  
 \end{frame}
 
@@ -90,31 +83,42 @@ R packages used:
   
 \end{frame}
 
-\section{Data and analysis}
+\section{Data and indices}
 
 \begin{frame}{What kind of data have been taken?}
     \begin{itemize}
         \item The satellite images were taken from Sentinel 2 - Open Hub. 2016 images will be referred to as \textbf{t1}, 2022 images as \textbf{t2}.
         \item I was interesting in particular in some Bands, useful for the analysis: 2, 3, 4, 8 and 11. 
-        \item The indices I computed for both years images are the \textbf{NDSI} - Normalized Difference Snow Index and the \textbf{NDVI} - Normalized Difference Vegetation Index.
+        \item The indices I computed for both years images are:
+        \\
+        the \textbf{NDSI} - Normalized Difference Snow Index and \\
+        the \textbf{NDVI} - Normalized Difference Vegetation Index.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Data importing}
 Steps made to import the Satellite images on R:
 \begin{enumerate}
-    \item download of data from Copernicus database (single images for each Band)
+    \item download of data from Copernicus database (single images for each Band) and placement of the images in a folder
     \item setting the working directory in R with the function \textbf{setwd()}
     \item upload the images with the function \textbf{rast()}
     
 \end{enumerate}
 \end{frame}
 
+\begin{frame}{Focus on Bands}
+\begin{figure}
+\centering
+\includegraphics[width=9cm]{The-normalized-spectral-response-of-Sentinel-2A-multi-spectral-instrument-MSI-bands.png}
+\caption{Spectral response of the Bands and their Wavelength}
+\end{figure}
+\end{frame}
+
+
 \begin{frame}{About NDSI}
 \begin{itemize}
     \item NDSI index is a measure of the relative magnitude of the reflectance difference between \textbf{visible} and \textbf{shortwave} infrared and it is useful for snow mapping.
     \item This index is also good for images with \textbf{clouds}: snow is highly absorptive in the NIR or the short-wave infrared part of the spectrum, while the most cloud reflectance remains to be high in the same parts of the spectrum: this allows a good separation of most clouds and snow. 
-    \item NDSI ranges \textbf{from -1 to 1}. Values \textbf{above 0.42} are usually snow.
 \end{itemize}
 \end{frame}
 
@@ -125,10 +129,8 @@ Steps made to import the Satellite images on R:
          \begin{equation}
          NDSI = \frac{GREEN(B3) - SWIR(B11)}{GREEN(B3)+ SWIR(B11)}
            \end{equation}
+     \item NDSI ranges \textbf{from -1 to 1}. Values \textbf{above 0.42} are usually snow.
 \end{itemize}
-\begin{figure}
-    \includegraphics[width=0.6\textwidth]{bande.png}
-\end{figure}
 \end{frame}
 
 \begin{frame}{About NDVI}
@@ -138,22 +140,14 @@ The NDVI formula for Sentinel-2 is the following:
          NDVI = \frac{NIR (B8) - RED(B4)}{NIR(B8) + RED(B4)}
            \end{equation}
 \begin{itemize}
-    \item Values approaching -1: correspond to water
-    \item Values between -0.1 and 0.1: correspond to barren areas of rock, sand, or \textbf{snow}. 
-    \item Values approximately 0.2 to 0.4: represent shrub and grassland 
-    \item Values approaching 1: indicate temperate and tropical rainforests and high vegetation vigour.
+    \item Values approaching \textbf{-1}: correspond to water
+    \item Values between \textbf{-0.1 and 0.1}: correspond to barren areas of rock, sand, or snow. 
+    \item Values approximately \textbf{0.2 to 0.4}: represent shrub and grassland 
+    \item Values approaching \textbf{1}: indicate temperate and tropical rainforests and high vegetation vigour.
 \end{itemize}
-    
-\end{frame}
-\begin{frame}{Focus on Bands}
-\begin{figure}
-\centering
-\includegraphics[width=9cm]{The-normalized-spectral-response-of-Sentinel-2A-multi-spectral-instrument-MSI-bands.png}
-\caption{Spectral response of the Bands and their Wavelength}
-\end{figure}
-    
 \end{frame}
 
+\section{Analysis}
 \begin{frame}{First steps of the analysis}
 \begin{figure}
     \includegraphics[width=0.75\textwidth]{serie6giusta.png}
@@ -198,19 +192,19 @@ The NDVI formula for Sentinel-2 is the following:
 
 
 
-\begin{frame}{Creation of the clusters}
+\begin{frame}{Visualisation of NDSI with 2 clusters}
 \begin{columns}[c]
 	\column{3cm}
  \footnotesize
  I used the function \textbf{im.classify()} to create
- \textbf{2 clusters}.\\
+ 2 clusters.\\
 \vspace{0.2cm}
 The aim was to better visualise the snow cover of the area in the two periods.\\
 \vspace{0.2cm}
 On the right the images of the clusters for t1 and t2 are plotted.
 	\column{8cm}
-	\includegraphics[width=3.5cm]{yes1.png}
-        \includegraphics[width=3.5cm]{yes2.png}
+	\includegraphics[width=3.8cm]{primaimm.png}
+        \includegraphics[width=3.8cm]{secondaimm.png}
 			
 \end{columns}
 \end{frame}
@@ -261,17 +255,19 @@ Results obtained:
     \centering
     \includegraphics[width=10cm]{giustandvi.png}
 \end{figure}
-It can be observed a smaller range of values of NDVI at t2.
+After computing the NDVI index for t1 and t2, their images have been plotted to visualize the difference in vegetation status.
 \end{frame}
 
 
-\begin{frame}{NDSI and NDVI}
+\begin{frame}{Visualisation of NDVI with 2 clusters}
+I used the function \textbf{im.classify()} to create 2 clusters. The aim was to better visualise the vegetation evolution between 2016 and 2022. 
 \begin{figure}
     \centering
-    \includegraphics[width=6.5cm]{finale confronti.png}
+    \includegraphics[width=9cm]{ndvi using two clusters.png}
 \end{figure}
-\caption{}
+
 \end{frame}
+
 
 \begin{frame}{Variability in a 3x3 window}
 With the functions \textbf{focal()} and \textbf{sd()} I computed the standard deviation 3x3 pixels window, in order to calculate the variability.
@@ -286,11 +282,11 @@ With the functions \textbf{focal()} and \textbf{sd()} I computed the standard de
 
 
 \section{Discussion}
-\begin{frame}{Discussion and conclusions (1)}
+\begin{frame}{Discussion and conclusions}
 
 The principal conclusions of this analysis are:
 \begin{enumerate}
-    \item There has been a \textbf{variation in snow cover} from 2016 to 2022. In particular, the percentage of snow varied \textbf{from 26,15\%} in 2016 to \textbf{15,60\%} in 2022. This could probably but not certainly be due to rising temperatures in recent years.\\
+    \item There has been a \textbf{variation in snow cover} from 2016 to 2022. In particular, the percentage of snow varied from \textbf{ 26,15\%} in 2016 to \textbf{15,60\%} in 2022. This could probably, but not certainly, be due to rising temperatures in recent years.\\
     \item This variation can be clearly seen in all the images plotted: the RGB ones and the NDSI index ones.\\
     \item The function \textbf{im.classify()} to create the 2 clusters seems to shown \textbf{good results} in indicating the areas where the snow is present or not.
 
@@ -298,7 +294,7 @@ The principal conclusions of this analysis are:
         \end{enumerate}
     \end{frame}
 
-\begin{frame}{Discussion and conclusions (2)}
+\begin{frame}{Discussion and conclusions}
 \begin{enumerate}
     \item From the NDVI index computation it can be noted that the areas cover with values around 0 (that indicate also snow) are \textbf{less extended at t2} compared to t1: this is another confirmation of the decrease in snow cover. 
     \item There are also more values of NDVI close to 1 (dark green area) at t1, and this indicates that in this period \textbf{plants} in the studied area \textbf{were healthier} in comparison with t2.

@@ -2,6 +2,7 @@ library(terra)
 library(imageRy)
 library(ncdf4)
 library(ggplot2)
+library(viridis)
 
 setwd("C:/Users/angel/Desktop/spatialecologyexam")
 

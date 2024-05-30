@@ -6,7 +6,7 @@ library(devtools)
 install.packages("devtools")
 library(devtools)
 
-devtools::install_github("ducciorocchini/imageRy")    #to install a package directly from github
+devtools::install_github("angiperuz/imageRy")    #to install a package directly from github
 
 library(imageRy)
 im.list()

@@ -1,6 +1,5 @@
 # Final script including all the different scripts during the lectures
 
-# ----------------------
 
 # Summary: 
 # 01 Beginning 
@@ -220,7 +219,6 @@ plot(precmap)
 plot(vegemap)
 
 
-# ----------------------
 
 # 03
 
@@ -280,7 +278,6 @@ pldc1 + pldc2
 
 plot(ord) #I see the ultimate variate multianalysis space 
 
-# ----------------------
 
 # 04
 
@@ -321,7 +318,6 @@ plot(b3,col=c2)
 plot(b4,col=c3)
 plot(b8, col=c4) 
 
-
 ####### STACK IMAGES
 # they're a function that plots all the selected images together, one over the other (in this case, four bands all together)
 # RGB SPACE = Red, Green and Blue components that build other colours by overlapping
@@ -351,7 +347,6 @@ im.plotRGB(stack_sent, r=3, g=2, b=4)
 # CORRELATIONS BETWEEN THE BANDS
 pairs(stack_sent)
 
-# --------------------------
 
 # 05
 
@@ -438,7 +433,6 @@ plot(ndvi2006, col=cl)
 ndvi2006a <- im.ndvi (m2006, 1, 2) 
 plot(ndvi2006a, col=cl) 
 
-# --------------------------
 
 # 06
 
@@ -502,7 +496,8 @@ plot(G2015,col=cl1)
 dev.off()
 stackG4 <- c(G2000,G2005,G2010,G2015)  #around 2005 there was the worst period
 plot(stackG4, col=cl1)
-# we see that the surface temperature in Greenland have increased and then decreased back, while that in the Nunavut has gradually increased
+# we see that the surface temperature in Greenland have increased and then decreased back, 
+# while that in the Nunavut has gradually increased
 # also Island's temperature has decreased a little bit
 
 # or only the first and the last
@@ -569,8 +564,6 @@ plot(acadif, col=cl)
 
 list.files()
 
-
-# ------------------------
 
 # 08
 
@@ -700,8 +693,6 @@ plot(p2)
 p1+p2  # we can make graphs comparing situations of 1992 and 2006
 
 
-# ---------------------
-
 # 10
 
 # measuring of RS based variability
@@ -754,8 +745,6 @@ par(mfrow=c(1,2))
 im.plotRGB(sent, r=2, g=1, b=3)
 plot(sd7, col=viridisc)
 
-
-# ---------------------
 
 # 11
 

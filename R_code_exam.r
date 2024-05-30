@@ -2,7 +2,6 @@ library(terra)
 library(imageRy)
 library(ncdf4)
 library(ggplot2)
-library(viridis)
 
 setwd("C:/Users/angel/Desktop/spatialecologyexam")
 
@@ -160,7 +159,7 @@ c_t1 <- im.classify(NDSI_t1, num_clusters = 2)
 
 c_t2 <- im.classify(NDSI_t2, num_clusters = 2)
 
-colclu <- colorRampPalette(c("white", "darkgoldenrod4")) (100)
+colclu <- colorRampPalette(c("white", "darkolivegreen")) (100)
 
 
 
